@@ -1,8 +1,14 @@
-from Player import Player
 from parser import loadPlayers
 from Chart import create_chart
+from db.espn_client import fillDB
+from db.clear_db import clearDB, deletePlayer
 
 def main():
+    #clearDB()
+    fillDB() #takes about 8 seconds
+
+#Code to test sample candle implementation
+def sampCandle():
     players = loadPlayers("data2.txt")
     for p in players:
         
@@ -17,9 +23,6 @@ def main():
             print("Close: " + str(candle.get_close()))
             print("Wick: " + str(candle.get_wick()))
             print()
-
-def getCurrPrice():
-    print("price")
 
 if __name__ == "__main__":
     main()
