@@ -5,7 +5,9 @@ from db.clear_db import clearDB, deletePlayer
 
 def main():
     #clearDB()
-    fillDB() #takes about 8 seconds
+    #fillDB() #takes about 8 seconds
+    print("Use api.py to start backend server")
+    print("cd to ./db and run individual files to clear/fill the db, or uncomment the lines above and run Main.py in the current backend directory")
 
 #Code to test sample candle implementation
 def sampCandle():

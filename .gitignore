@@ -7,3 +7,8 @@ __pycache__/
 
 # SQLite databases
 *.db
+
+# .venv nonsense
+.venv/
+node_modules/
+backend/db/output.txt

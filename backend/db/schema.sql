@@ -1,8 +1,6 @@
 PRAGMA foreign_keys = ON;
 
--- We don't need a separate teams table for the current ingestion pipeline.
--- Store ESPN team id directly on each player row.
-
+--<-------------NFL Player Table------------->--
 CREATE TABLE IF NOT EXISTS players (
     -- ESPN athlete id
     id TEXT PRIMARY KEY,
@@ -38,3 +36,35 @@ CREATE TABLE IF NOT EXISTS players (
 CREATE INDEX IF NOT EXISTS idx_players_name ON players(full_name);
 CREATE INDEX IF NOT EXISTS idx_players_position ON players(position);
 CREATE INDEX IF NOT EXISTS idx_players_team ON players(team_id);
+
+--<-------------NFL Teams Table------------->--
+CREATE TABLE IF NOT EXISTS teams (
+    -- ESPN team ID
+    id INTEGER PRIMARY KEY,
+
+    -- FULL TEAM NAME
+    full_team_name TEXT NOT NULL,
+
+    -- TEAM LOCATION
+    team_location TEXT NOT NULL,
+
+    -- TEAM NICKNAME
+    team_nickname TEXT NOT NULL,
+
+    -- TEAM ABBREVIATION
+    team_abbrev TEXT NOT NULL,
+
+    -- TEAM LOGO
+    team_logo TEXT,
+
+    -- PRIMARY COLOR
+    team_prim_color TEXT NOT NULL,
+
+    -- ALTERNATE COLOR
+    team_alt_color TEXT NOT NULL,
+
+    -- TIMESTAMP
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_teams_abbrev ON teams(team_abbrev);
