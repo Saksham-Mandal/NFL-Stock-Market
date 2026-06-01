@@ -1,11 +1,10 @@
 const API_BASE = "http://127.0.0.1:5000";
 
-export async function searchPlayerByName(name: string) {
+export async function searchTeamByID(id: number) {
   try {
-    const url = `${API_BASE}/api/player?name=${encodeURIComponent(name)}`;
-  
+    const url = `${API_BASE}/api/team?team_id=${id}`;
     const res = await fetch(url);
-  
+
     if (res.status === 404) {
       return { found: false as const };
     }
@@ -19,4 +18,4 @@ export async function searchPlayerByName(name: string) {
     console.error("Backend request failed:", err);
     throw new Error("Backend unavailable. Try again in a moment.");
   }
-  }
+}

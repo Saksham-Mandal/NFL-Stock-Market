@@ -1,11 +1,37 @@
 import requests
 import sqlite3
+import nflreadpy as nfl
 from pathlib import Path
+from datetime import datetime
 
 DB_PATH = Path(__file__).resolve().parent / "nfl.db"
 
-def fillDB():
+def get_lgyear():
+    today = datetime.now()
 
+    year = today.year
+    lgstart = datetime(year, 3, 11)
+
+    if today >= lgstart:
+        return year
+    else:
+        return year - 1
+
+lg_yr = get_lgyear()
+
+df_ids = nfl.load_rosters(seasons=[lg_yr])
+
+id_lookup = {}
+for row in df_ids.iter_rows(named=True):
+    espn_id = row.get("espn_id")
+    gsis_id = row.get("gsis_id")
+    if espn_id is not None:
+        id_lookup[str(espn_id)] = gsis_id
+
+
+
+def fillDB():
+    print("Starting Player DB Population...")
     conn = sqlite3.connect(DB_PATH)
 
     try:
@@ -23,7 +49,7 @@ def fillDB():
     finally:
         conn.close()
     
-    print(f"✅ DB filled")
+    print(f"✅ Player DB filled")
 
 def getFullRoster(teamnum: int, conn):
     
@@ -37,9 +63,10 @@ def getFullRoster(teamnum: int, conn):
         id, full_name, first_name, last_name,
         position, team_id, active,
         height_in, weight_lb, age,
-        date_of_birth, headshot_url
+        date_of_birth, jersey_number, experience,
+        headshot_url, nflverse_player_id
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT(id) DO UPDATE SET
         full_name     = excluded.full_name,
         first_name    = excluded.first_name,
@@ -51,7 +78,10 @@ def getFullRoster(teamnum: int, conn):
         weight_lb     = excluded.weight_lb,
         age           = excluded.age,
         date_of_birth = excluded.date_of_birth,
+        jersey_number = excluded.jersey_number,
+        experience = excluded.experience,
         headshot_url  = excluded.headshot_url,
+        nflverse_player_id = excluded.nflverse_player_id,
         updated_at    = CURRENT_TIMESTAMP
     """
 
@@ -60,7 +90,7 @@ def getFullRoster(teamnum: int, conn):
 
         data = response.json() # the make-up of data can be found in the Google Doc
 
-        group = data["athletes"]
+        group = data.get("athletes", [])
         for item in group:
             playerlist = item.get("items", [])
             for player in playerlist:
@@ -77,10 +107,22 @@ def getFullRoster(teamnum: int, conn):
                     height_in = player.get("height")
                     weight_lb = player.get("weight")
                     age = player.get("age")
-                    dob = player.get("dateOfBirth")
+                    date_of_birth = player.get("dateOfBirth")
+
+                    # Extra Info
+                    jersey_number = player.get("jersey")
+                    exp_dict = player.get("experience") or {}
+                    experience = exp_dict.get("years")
+                    experience = int(experience) if experience is not None else None
+
 
                     headshot_dict = player.get("headshot") or {}
                     headshot_url = headshot_dict.get("href")
+
+                    # Adding nflverse id
+                    nflverse_player_id = id_lookup.get(str(player_id))
+                    if nflverse_player_id is None:
+                        print(f"No match: {full_name} | ESPN ID {player_id} | Team {teamnum} | Pos {pos}")
 
                     # Skip if essential fields are missing
                     if not player_id or not full_name or not pos:
@@ -99,8 +141,11 @@ def getFullRoster(teamnum: int, conn):
                             height_in,
                             weight_lb,
                             age,
-                            dob,
+                            date_of_birth,
+                            jersey_number,
+                            experience,
                             headshot_url,
+                            nflverse_player_id,
                         ),
                     )
     except Exception as e:
@@ -179,9 +224,10 @@ def inspectEndpoint():
     print("Start of Inspection Code")
     #---------Endpoint Inspection Code---------#
 
-    TEAM_URL = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"
+    #TEAM_URL = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams"
+    PLAYER_URL = "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/1/roster"
     
-    response = requests.get(TEAM_URL, timeout=15)
+    response = requests.get(PLAYER_URL, timeout=15)
     response.raise_for_status()
 
     data = response.json()
@@ -191,41 +237,55 @@ def inspectEndpoint():
     #print(len(data))
     #print(data.keys())
 
+    player1 = data["athletes"][0]["items"][0]
+    print(player1.keys())
+
+    jersey = player1["jersey"]
+    #print(type(jersey))
+    #print(len(jersey))
+    print("Jersey Number: " + jersey)
+
+    exp = player1["experience"]
+    #print(type(exp))
+    #print(len(exp))
+    #print(exp.keys())
+    print("Experience: " + str(exp["years"]))
+
     #print("Inspecting sports:")
-    sports = data["sports"]
+    #sports = data["sports"]
     #print(type(sports))
     #print(len(sports))
 
     #print("Inspecting item1")
-    item1 = sports[0]
+    #item1 = sports[0]
     #print(type(item1))
     #print(len(item1))
     #print(item1.keys())
 
-    print("Inspecting leagues:")
-    leagues = item1["leagues"]
-    print(type(leagues))
-    print(len(leagues))
+    #print("Inspecting leagues:")
+    #leagues = item1["leagues"]
+    #print(type(leagues))
+    #print(len(leagues))
 
     #print("Inspecting league1:")
-    league1 = leagues[0]
+    #league1 = leagues[0]
     #print(type(league1))
     #print(len(league1))
     #print(league1.keys())
 
     #print("Inspecting teams:")
-    teams = league1["teams"]
+    #teams = league1["teams"]
     #print(type(teams))
     #print(len(teams))
 
-    print("Inspecting teams0:")
-    teams0 = teams[0]
-    print(type(teams0))
-    print(len(teams0))
-    print(teams0.keys())
+    #print("Inspecting teams0:")
+    #teams0 = teams[0]
+    #print(type(teams0))
+    #print(len(teams0))
+    #print(teams0.keys())
 
     #print("Inspecting team:")
-    team1 = teams0["team"]
+    #team1 = teams0["team"]
     #print(type(team1))
     #print(len(team1))
     #print(team1.keys())
@@ -237,11 +297,11 @@ def inspectEndpoint():
     #print(abbrev)
 
     #print("Inspecting logos:")
-    logos = team1["logos"]
+    #logos = team1["logos"]
     #print(type(logos))
     #print(len(logos))
 
-    logo1 = logos[0]
+    #logo1 = logos[0]
     #print(type(logo1))
     #print(len(logo1))
     #print(logo1.keys())
@@ -268,5 +328,5 @@ def inspectEndpoint():
 
 if __name__ == "__main__":
     #fillTeamDB()
-    fillDB()
-    #inspectEndpoint()
+    #fillDB()
+    inspectEndpoint()

@@ -1,11 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Saira+Stencil:ital,wght@0,100..900;1,100..900&display=swap');
+
 body {
-  background-color: #0f1115;
+  background-color: #0a0f1c;
   color: white;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.navdiv {
-  background-color: black;
+.btn-primary {
+  background-color: rgb(50, 95, 155);
+  color: rgb(255, 255, 255);
+  padding: 5px;
+}
+
+.page {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+/*------Layout css------*/
+
+.pageLayout {
+  display: flex;
+  flex-direction: column;
+}
+
+/*------Title css------*/
+.title-container {
+  /*background-color: #1a0029;*/
+  background-color: #000000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* centers horizontally */
+}
+
+.title {
+  margin: 0;
+  font-family: 'Saira Stencil', sans-serif;
+  font-size: 7ch;
+  font-weight: 500;
+  color:#c3a041;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/*------Selector css------*/
+.selection-bar {
+  display: flex;
+  flex-direction: row;
+}
+
+.selector-button {
+  width: 100%;
+  padding: 15px;
+  font-size: 2ch;
+  background-color: #0a0f1c;
+  color: #c3a041;
+  border: none;
+  
+}
+
+/*------Search css------*/
+
+.search-container {
+  background-color: #0a0f1c;
   display: flex;
   flex-direction: column;
   align-items: center;      /* centers horizontally */
@@ -15,6 +74,13 @@ body {
 .navtitle {
   margin: 0;
   margin-bottom: 20px;
+  font-family: 'Saira Stencil', sans-serif;
+  font-size: 7ch;
+  font-weight: 500;
+  color:#c3a041;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .navsearch {
@@ -29,20 +95,92 @@ body {
   justify-content: center;
 }
 
-.btn-primary {
-  background-color: rgb(67, 116, 180);
-  color: rgb(255, 255, 255);
-  padding: 5px;
+.logo-img {
+  height: 125px;
+  width: auto;
 }
 
-.page {
-  width: 100%;
+/*------SearchBar css------*/
+
+.searchbar-form {
   display: flex;
+  align-items: flex-start;
   justify-content: center;
-  padding: 40px 0;
+  gap: 12px;
+  width: 100%;
 }
 
-.pageLayout {
+.searchbar-input-wrap {
+  position: relative;
+  width: 420px;
+  min-width: 420px;
+}
+
+.searchbar-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 10px;
+  /*border: 1px solid #334155;*/
+  border: none;
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 15px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.searchbar-input:focus {
+  border-color: #200032;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.searchbar-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  background: #020817;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  overflow: hidden;
+  z-index: 1000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.searchbar-dropdown-item {
+  padding: 12px 14px;
+  cursor: pointer;
+  color: #e2e8f0;
+  transition: background 0.15s ease;
+}
+
+.searchbar-dropdown-item:hover {
+  background: #0f172a;
+}
+
+.searchbar-dropdown-item.with-border {
+  border-top: 1px solid #1e293b;
+}
+
+.searchbar-btn {
+  background-color: #410067;
+  height: 44px;
+  width: 150px;
+  padding: 0 18px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  border: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: large;
+  transition: 400ms;
+}
+
+.searchbar-btn:hover {
+  background-color: #c3a041;
+}
+
+.content-container {
   display: flex;
   width: 100%;
   gap: 24px;
@@ -64,8 +202,94 @@ body {
 
 /*------Player Hero css------*/
 
-.box1 {
-  display: "flex";
-  gap: 16;
-  align-items: "center";
+.playerHero-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  /*background-color: var(--team-primary);
+  color: var(--team-secondary);*/
+  padding-bottom: 20px;
+}
+
+.playerHero-teamname {
+  display: flex;
+  flex-direction: column;
+}
+
+.teamname {
+  width: 365px;
+  padding: 2px;
+  font-size: 25px;
+  font-weight: 600;
+  font-family: 'Saira Stencil', sans-serif;
+  background-color: var(--team-primary);
+  color: var(--team-secondary);
+  text-align: center;
+}
+
+.playerHero-player {
+  display: flex;
+  flex-direction: row;
+  padding-top: 10px;
+}
+
+.playername {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  align-items: center;
+  font-family: 'Saira Stencil', sans-serif;
+  font-size: 3ch;
+}
+
+.firstname {
+  display: flex;
+  font-weight: 100;
+}
+
+.lastname {
+  display: flex;
+  font-weight: 500;
+}
+
+.playerHero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  width: 500 px;
+}
+
+.infotable{
+  border-collapse: collapse;
+  width: 358px;
+}
+
+.infotable-label {
+  font-family: 'Saira Stencil', sans-serif;
+  font-weight: 100;
+  padding: 5px 40px;
+}
+
+.infotable-info {
+  font-family: 'Saira Stencil', sans-serif;
+  font-weight: 400;
+}
+
+/*------Player Chart css------*/
+.chart-card {
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  margin-top: 20px;
+  background: #0a0f1c;
+  border-radius: 0px;
+  box-sizing: border-box;
+}
+
+.chart-inner {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
 }

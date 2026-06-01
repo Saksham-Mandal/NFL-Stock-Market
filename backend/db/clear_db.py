@@ -8,8 +8,7 @@ def clearDB():
     with sqlite3.connect(DB_PATH) as conn:
         cur = conn.cursor()
         cur.execute("DELETE FROM players;")
-    print(f"✅ DB cleared")
-
+    print("Players DB cleared")
 
 def deletePlayer(playerid: str):
     with sqlite3.connect(DB_PATH) as conn:
@@ -18,6 +17,12 @@ def deletePlayer(playerid: str):
             "DELETE FROM players WHERE id = ?;",
             (playerid,),
         )
+
+def clearTeamsDB():
+    with sqlite3.connect(DB_PATH) as conn:
+        cur = conn.cursor()
+        cur.execute("DELETE FROM teams;")
+    print("Teams DB cleared")
 
 if __name__ == "__main__":
     clearDB()

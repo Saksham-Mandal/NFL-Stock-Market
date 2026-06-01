@@ -1,9 +1,7 @@
+import type { Suggestion } from "./types";
+
 const API_BASE = "http://127.0.0.1:5000";
 
-export type Suggestion = {
-  id: string;
-  full_name: string;
-};
 
 export async function suggestPlayers(q: string): Promise<Suggestion[]> {
   const trimmed = q.trim();

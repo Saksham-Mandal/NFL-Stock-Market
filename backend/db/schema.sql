@@ -26,10 +26,17 @@ CREATE TABLE IF NOT EXISTS players (
     weight_lb INTEGER,
     age INTEGER,
     date_of_birth TEXT,
-    
+
+    -- Other Information
+    jersey_number INTEGER,
+    experience INTEGER,
+
     -- URLs are often present (e.g., headshot or profile link); keep as text
     headshot_url TEXT,
-    
+
+    -- nflverse player ID (needed for stats retrieval)
+    nflverse_player_id TEXT,
+
     updated_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 

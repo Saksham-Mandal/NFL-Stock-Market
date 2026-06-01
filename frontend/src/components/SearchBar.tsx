@@ -31,65 +31,43 @@ const SearchBar = ({ placeholder, onSubmit, btnClassName }: SearchProps) => {
     return () => window.clearTimeout(timer);
   }, [value]);
 
-  // Helper Functions:
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit?.(value);
+    onSubmit?.(value.trim());
   };
 
   const pickSuggestion = (name: string) => {
     setValue(name);
     setOpen(false);
     setResults([]);
-    onSubmit?.(name); // triggers your existing /api/player wiring
+    onSubmit?.(name);
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{ display: "flex", gap: 10, alignItems: "flex-start" }}
-    >
-      <div style={{ position: "relative", width: "100%", maxWidth: 520 }}>
+    <form className="searchbar-form" onSubmit={handleSubmit}>
+      <div className="searchbar-input-wrap">
         <input
+          id="player-search"
+          name="player-search"
+          className="searchbar-input"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder={placeholder}
-          style={{
-            width: "100%",
-            padding: "10px 12px",
-            borderRadius: 8,
-            border: "1px solid #333",
-          }}
           onFocus={() => results.length > 0 && setOpen(true)}
           onBlur={() => window.setTimeout(() => setOpen(false), 120)}
         />
 
         {open && results.length > 0 && (
-          <div
-            style={{
-              position: "absolute",
-              top: "calc(100% + 8px)",
-              left: 0,
-              right: 0,
-              border: "1px solid #333",
-              borderRadius: 8,
-              overflow: "hidden",
-              background: "black",
-              zIndex: 50,
-            }}
-          >
-            {results.map((r) => (
+          <div className="searchbar-dropdown">
+            {results.map((r, index) => (
               <div
                 key={r.id}
+                className={`searchbar-dropdown-item ${
+                  index !== 0 ? "with-border" : ""
+                }`}
                 onMouseDown={(e) => {
                   e.preventDefault();
                   pickSuggestion(r.full_name);
-                }}
-                style={{
-                  padding: "10px 12px",
-                  cursor: "pointer",
-                  borderTop: "1px solid #222",
-                  color: "white",
                 }}
               >
                 {r.full_name}
@@ -99,7 +77,10 @@ const SearchBar = ({ placeholder, onSubmit, btnClassName }: SearchProps) => {
         )}
       </div>
 
-      <Button type="submit" className={btnClassName}>
+      <Button
+        type="submit"
+        className={`searchbar-btn ${btnClassName ?? ""}`.trim()}
+      >
         Search
       </Button>
     </form>
