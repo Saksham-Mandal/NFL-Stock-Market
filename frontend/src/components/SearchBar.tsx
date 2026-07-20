@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Button from "../components/Button";
-import { suggestPlayers, type Suggestion } from "../util/suggestplayers";
+import { suggestPlayers } from "../util/suggestplayers";
+import { type Suggestion } from "../util/types";
 
 type SearchProps = {
   placeholder?: string;

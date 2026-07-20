@@ -110,7 +110,7 @@ const Page = ({ player, error, isLoading, team }: PageProps) => {
                 </td>
                 <td>
                   <div className="infotable-info">
-                    {player.age + " yrs" ?? "?"}
+                    {player.age != null ? `${player.age} yrs` : "?"}
                   </div>
                 </td>
               </tr>
@@ -120,12 +120,12 @@ const Page = ({ player, error, isLoading, team }: PageProps) => {
                 </td>
                 <td>
                   <div className="infotable-info">
-                    {getPlayerHeightFeet(player) +
-                      "' " +
-                      getPlayerHeightInches(player) +
-                      '" ' ??
-                      "?" ??
-                      "?"}
+                    {getPlayerHeightFeet(player) != null &&
+                    getPlayerHeightInches(player) != null
+                      ? `${getPlayerHeightFeet(
+                          player
+                        )}' ${getPlayerHeightInches(player)}"`
+                      : "?"}
                   </div>
                 </td>
               </tr>
@@ -135,7 +135,7 @@ const Page = ({ player, error, isLoading, team }: PageProps) => {
                 </td>
                 <td>
                   <div className="infotable-info">
-                    {player.weight_lb + " lbs" ?? "?"}
+                    {player.weight_lb != null ? `${player.weight_lb} lbs` : "?"}
                   </div>
                 </td>
               </tr>

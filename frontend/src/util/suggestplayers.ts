@@ -1,6 +1,6 @@
 import type { Suggestion } from "./types";
 
-const API_BASE = "http://127.0.0.1:5000";
+const API_BASE = "http://127.0.0.1:5050";
 
 
 export async function suggestPlayers(q: string): Promise<Suggestion[]> {

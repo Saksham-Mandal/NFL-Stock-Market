@@ -2,6 +2,7 @@ import Nav from "./sections/Nav";
 import PlayerHero from "./sections/PlayerHero";
 import PlayerChart from "./sections/PlayerChart";
 import Selector from "./components/Selector";
+import Banner from "./components/Banner";
 import logo from "./imgs/logo-5.png";
 import { useState, useEffect } from "react";
 import { searchPlayerByName } from "./util/searchplayer";
@@ -106,12 +107,7 @@ const Layout = () => {
   return (
     <>
       <div className="pageLayout">
-        <div className="title-container">
-          <div className="title">
-            <img src={logo} alt="DarkHorse Logo" className="logo-img" />
-            <div>DarkHorse</div>
-          </div>
-        </div>
+        <Banner />
         <div className="selection-container">
           <Selector></Selector>
         </div>

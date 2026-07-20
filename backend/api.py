@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from pathlib import Path
 from flask_cors import CORS
 from candle_engine import generate_candles
+from db.users_db import create_user, verify_user_login
 import sqlite3
 
 DB_PATH = Path(__file__).resolve().parent / "db" / "nfl.db"
@@ -110,5 +111,51 @@ def get_candle_chart():
         "candles": candles
     })
 
+#user signup endpoint---gets and stors user information
+@app.post("/api/signup")
+def signup_user():
+    data = request.get_json()
+
+    username = data.get("username")
+    email = data.get("email")
+    password = data.get("password")
+
+    if not username or not email or not password:
+        return jsonify({"error": "Username, email, and password are required"}), 400
+    
+    conn = get_conn()
+    result = create_user(conn, username, email, password)
+
+    if not result["success"]:
+        return jsonify({"error": result["error"]}), 409
+
+    return jsonify({
+        "message": "User created successfully",
+        "user_id": result["user_id"]
+    }), 201
+
+#user login endpoint---authenticates username and password
+@app.post("/api/login")
+def login():
+    data = request.get_json()
+
+    email = data.get("email")
+    password = data.get("password")
+
+    if not email or not password:
+        return jsonify({"error": "Email and password are required"}), 400
+
+    conn = get_conn()
+    user = verify_user_login(conn, email, password)
+    conn.close()
+
+    if user is None:
+        return jsonify({"error": "Invalid email or password"}), 401
+
+    return jsonify({
+        "message": "Login successful",
+        "user": user
+    }), 200
+
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(host="127.0.0.1", port=5000, debug=True)

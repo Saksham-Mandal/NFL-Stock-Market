@@ -75,3 +75,20 @@ CREATE TABLE IF NOT EXISTS teams (
 );
 
 CREATE INDEX IF NOT EXISTS idx_teams_abbrev ON teams(team_abbrev);
+
+--<-------------App Users Table------------->--
+CREATE TABLE IF NOT EXISTS users (
+    -- User ID
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    -- Username
+    username TEXT NOT NULL UNIQUE,
+
+    -- Email
+    email TEXT NOT NULL UNIQUE,
+
+    -- Password (hash)
+    password_hash TEXT NOT NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

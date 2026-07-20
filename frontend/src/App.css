@@ -164,7 +164,7 @@ body {
 }
 
 .searchbar-btn {
-  background-color: #410067;
+  background-color: rgb(39, 48, 94);
   height: 44px;
   width: 150px;
   padding: 0 18px;
@@ -177,7 +177,7 @@ body {
 }
 
 .searchbar-btn:hover {
-  background-color: #c3a041;
+  background-color: rgb(75, 93, 182);
 }
 
 .content-container {
